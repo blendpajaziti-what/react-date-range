@@ -2,7 +2,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { startOfDay, format, isSameDay, isAfter, isBefore, endOfDay } from 'date-fns';
+import {
+  startOfDay,
+  format,
+  isSameDay,
+  isAfter,
+  isBefore,
+  endOfDay,
+  startOfYear,
+  differenceInWeeks,
+} from 'date-fns';
 
 class DayCell extends Component {
   constructor(props, context) {
@@ -149,6 +158,13 @@ class DayCell extends Component {
       />
     ));
   };
+  renderWeekNumber = () => {
+    const { day, isStartOfWeek } = this.props;
+    if (isStartOfWeek) {
+      const numberOfWeeks = differenceInWeeks(day, startOfYear(day)) + 1;
+      return <span className="rdrWeekNumber">{numberOfWeeks}</span>;
+    }
+  };
   render() {
     return (
       <button
@@ -167,6 +183,7 @@ class DayCell extends Component {
         style={{ color: this.props.color }}>
         {this.renderSelectionPlaceholders()}
         {this.renderPreviewPlaceholder()}
+        {this.renderWeekNumber()}
         <span className={this.props.styles.dayNumber}>
           <span>{format(this.props.day, this.props.dayDisplayFormat)}</span>
         </span>
